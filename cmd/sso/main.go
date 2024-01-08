@@ -31,8 +31,16 @@ func main() {
 
 	// TODO: запустить gRPC-сервер приложения
 
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+	stop := make(chan os.Signal, 1)                      //когда попытаемя прервать то перед завершением выполнит действия (ОС отправит сигнал о завершении)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT) // ждет сигнал от системы и запишет в канал
+
+	sign := <-stop // блокирующий, будет висеть пока в канал не придет сигнал
+
+	log.Info("stopping application", slog.String("signal", sign.String()))
+
+	application.GRPCSrv.Stop()
+
+	log.Info("application stopped")
 }
 
 func setupLogger(env string) *slog.Logger {
