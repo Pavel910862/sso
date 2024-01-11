@@ -6,9 +6,11 @@ import (
 	"fmt"
 
 	// библиотека для миграций
-	"github.com/golang-migrate/migrate"
+	_ "github.com/mattn/go-sqlite3"
 	// драйвер для выполнения миграций SQLite 3
+	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
+
 	// драйвер для получения миграций из файлов
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
@@ -31,6 +33,7 @@ func main() {
 
 	m, err := migrate.New(
 		"file://"+migrationsPath,
+		//"file:///C:/Users/Алёна Валерьевна/Desktop/sso/internal/migrations",
 		fmt.Sprintf("sqlite3://%s?x-migrations-table=%s", storagePath, migrationsTable),
 	)
 	if err != nil {

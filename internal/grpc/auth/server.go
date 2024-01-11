@@ -2,9 +2,11 @@ package auth
 
 import (
 	"context"
+	"errors"
+	"ssos/internal/services/auth"
+	"ssos/internal/storage"
 
 	"github.com/Pavel910862/protos/protos/gen/go/sso"
-	// sso "github.com/Pavel910862/protos/protos/gen/go/sso"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -47,7 +49,10 @@ func (s *serverAPI) Login(
 	// TODO: implement login via auth service (сервисный слой)
 	token, err := s.auth.Login(ctx, req.GetEmail(), req.GetPassword(), int(req.GetAppId()))
 	if err != nil {
-		// TODO: ...
+		if errors.Is(err, auth.ErrInvalidCredentials) {
+			return nil, status.Error(codes.InvalidArgument, "invalid email or password")
+		}
+
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
@@ -67,7 +72,10 @@ func (s *serverAPI) Register(
 
 	userID, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword())
 	if err != nil {
-		// TODO: ...
+		if errors.Is(err, storage.ErrUserExicts) {
+			return nil, status.Error(codes.AlreadyExists, "invalid email or password")
+		}
+
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
@@ -86,7 +94,10 @@ func (s *serverAPI) IsAdmin(
 
 	isAdmin, err := s.auth.IsAdmin(ctx, req.GetUserId())
 	if err != nil {
-		// TODO: ...
+		if errors.Is(err, storage.ErrUserNotFound) {
+			return nil, status.Error(codes.NotFound, "invalid email or password")
+		}
+
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 

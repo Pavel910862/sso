@@ -27,10 +27,6 @@ func main() {
 
 	go application.GRPCSrv.MustRun()
 
-	// TODO: инициализировать приложение (app)
-
-	// TODO: запустить gRPC-сервер приложения
-
 	stop := make(chan os.Signal, 1)                      //когда попытаемя прервать то перед завершением выполнит действия (ОС отправит сигнал о завершении)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT) // ждет сигнал от системы и запишет в канал
 

@@ -6,9 +6,9 @@ require (
 	github.com/Pavel910862/protos v0.0.1
 	github.com/fatih/color v1.16.0
 	github.com/golang-jwt/jwt/v5 v5.2.0
-	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/mattn/go-sqlite3 v1.14.19
 	golang.org/x/crypto v0.18.0
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
 	google.golang.org/grpc v1.60.1
@@ -22,7 +22,6 @@ require (
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-sqlite3 v1.14.19 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
