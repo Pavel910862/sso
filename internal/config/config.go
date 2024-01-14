@@ -30,17 +30,32 @@ func MustLoad() *Config { // используем Must чтобы не возв�
 	}
 
 	// проверяем что по этому пути что-то есть
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		panic("config file does not exist" + path)
+	//if _, err := os.Stat(path); os.IsNotExist(err) {
+	//	panic("config file does not exist" + path)
+	//}
+
+	//var cfg Config // переменная в которую будет сохранен объект конфига
+
+	//if err := cleanenv.ReadConfig("C:/Users/Алёна Валерьевна/Desktop/sso/сonfig/local.yaml", &cfg); err != nil { //непосредственно для парсинга файла
+	//	panic("failed to read config" + err.Error())
+	//}
+
+	return MustLoadByPath(path) //возвращаем объект конфига
+}
+
+func MustLoadByPath(configPath string) *Config {
+	// check if file exists
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		panic("config file does not exist111: " + configPath)
 	}
 
-	var cfg Config // переменная в которую будет сохранен объект конфига
+	var cfg Config
 
-	if err := cleanenv.ReadConfig("C:/Users/Алёна Валерьевна/Desktop/sso/сonfig/local.yaml", &cfg); err != nil { //непосредственно для парсинга файла
-		panic("failed to read config" + err.Error())
+	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+		panic("cannot read config: " + err.Error())
 	}
 
-	return &cfg //возвращаем объект конфига
+	return &cfg
 }
 
 func fetchConfigPath() string { //получает конфиг сначала из флага потом из переменных окружения

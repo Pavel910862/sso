@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"ssos/internal/services/auth"
-	"ssos/internal/storage"
 
 	"github.com/Pavel910862/protos/protos/gen/go/sso"
 	"google.golang.org/grpc"
@@ -13,12 +12,14 @@ import (
 )
 
 type Auth interface {
-	Login(ctx context.Context,
+	Login(
+		ctx context.Context,
 		email string,
 		password string,
 		appID int,
 	) (token string, err error)
-	RegisterNewUser(ctx context.Context,
+	RegisterNewUser(
+		ctx context.Context,
 		email string,
 		password string,
 	) (userID int64, err error)
@@ -72,8 +73,8 @@ func (s *serverAPI) Register(
 
 	userID, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword())
 	if err != nil {
-		if errors.Is(err, storage.ErrUserExicts) {
-			return nil, status.Error(codes.AlreadyExists, "invalid email or password")
+		if errors.Is(err, auth.ErrUserExists) {
+			return nil, status.Error(codes.AlreadyExists, "invalid email or password111")
 		}
 
 		return nil, status.Error(codes.Internal, "internal error")
@@ -94,7 +95,7 @@ func (s *serverAPI) IsAdmin(
 
 	isAdmin, err := s.auth.IsAdmin(ctx, req.GetUserId())
 	if err != nil {
-		if errors.Is(err, storage.ErrUserNotFound) {
+		if errors.Is(err, auth.ErrUserNotFound) {
 			return nil, status.Error(codes.NotFound, "invalid email or password")
 		}
 
